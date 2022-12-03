@@ -147,3 +147,22 @@ int main()
  n = r*c;
  int parent[n];
  int rank[n];
+    for(l = 0; l < n; l++)
+ {
+ rank[l] = 0;
+ }
+ makeset(n,parent);
+ int arr[20][20];
+ printf("\nEnter the elements of adjacency matrix(0's and 1's):\n");
+ for(i=0;i<r;i++)
+ {
+ for(j=0;j<c;j++)
+ {
+ scanf("%d",&arr[i][j]);
+ }
+ }
+ total = count_of_Islands(arr,r,c,n,parent,rank);
+ printf("\nThe number of islands are: %d\n",total);
+ return 0;
+}
+
