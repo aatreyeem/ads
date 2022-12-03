@@ -1,43 +1,111 @@
-#include<iostream>
-#include<vector>
-#include<cstdint>
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdint.h>
+
 struct Node{
     int data;
-    Node *link;
+    struct Node *npx;
+};
+
+struct Node *head=NULL;
+struct Node* XOR(struct Node *add1, struct Node *add2){
+    struct Node *res;
+    res=(struct Node*)((uintptr_t)(add1)^(uintptr_t)(add2));
+    return res;
 }
-Node *XOR(Node *x,Node *y){
-    return(Node*)((uniptr(x)) ^ (uniptr(y)));
-}
-void traverse (Node *head){
-    Node *curr=head;
-    Node *prev=nullptr;
-    Node *next;
-    while(curr != nullptr){
-        cout<<curr->data<<"->";
-        next=XOR(prev,curr->link);
-        prev=curr;
-        curr=next;}
-        cout<<nullptr;
-    
-}
-void push(Node *&headRef,int data){
-    Node *newNode=new Node();
+
+
+void insert(int data){
+    struct Node *newNode=(struct Node*)malloc(sizeof(struct Node));
     newNode->data=data;
-    newNode->link XOR(headref,nullptr);
-    if(headrRef){
-        headRef->link=XOR(headRef->link,nullptr);
+
+    newNode->npx=XOR(head,NULL);
+    if(head==NULL){
+        head=newNode;
     }
-    if(headRef){
-        headRef->link =XOR(headRef->link,nullptr);
+    else{
+        struct Node *next=XOR(head->npx,NULL);
+        head->npx=XOR(newNode,next);
+
+        head=newNode;
     }
-    headRef=newNode;
 }
-int main(){
-    vector <int> keys={1,2,3,4,5};
-    int n=sizeof(keys)/sizeof(keys[0]);
-    struct Node*head=NULL;
-    for (int i=n-1;i>=0;i--){
-        push(&head,keys[i]);
+
+int delete(){
+
+    if(head==NULL){
+        printf("Empty List!!");
+        return -1;
     }
-    traverse(head);
+
+    struct Node *curr=head;
+    struct Node *next=NULL;
+    struct Node *prev=NULL;
+    struct Node *prev2=NULL;
+    while(XOR(curr->npx,prev) != NULL){
+        next=XOR(curr->npx,prev);
+        prev=curr;
+        curr=next;
+    }
+    int res=curr->data;
+    prev=XOR(curr->npx,NULL);
+    prev2=XOR(prev->npx,curr);
+    prev->npx=XOR(prev2,NULL);
+    free(curr);
+    return res;
+}
+
+
+void print(){
+    struct Node *curr=head;
+    struct Node *next=NULL;
+    struct Node *prev=NULL;
+
+
+    while(curr != NULL){
+        printf("%d ",curr->data);
+
+        next=XOR(curr->npx,prev);
+        prev=curr;
+
+        curr=next;
+    }
+}
+
+
+
+int main()
+{
+
+    while(1){
+        int ch;
+        printf("Enter 1 to insert:\n");
+        printf("Enter 2 to delete:\n");
+        printf("Enter 3 to Display\n");
+        printf("Enter 4 to Exit\n");
+        scanf("%d",&ch);
+        switch(ch){
+            case 1:{
+                int data;
+                printf("\nEnter the data to be inserted :");
+                scanf("%d",&data);
+                insert(data);
+                break;
+            }
+
+            case 2:
+                printf("Deleted Value %d\n",delete());
+                break;
+            case 3:
+                printf("Data in the list are \n");
+                print();
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Error!!! Enter the correct value");
+                break;
+        }
+
+    }
 }
